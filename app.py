@@ -90,6 +90,5 @@ else:
             st.session_state.chat_processing = False
             st.session_state.chat_busy = False   # ▶ 버튼 해제
             st.rerun()
- False
             st.session_state.chat_busy = False   # ▶ 버튼 해제
             st.rerun()
