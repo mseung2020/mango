@@ -119,6 +119,7 @@ def render_news_list(news, selected_cats, expanded_id=None, on_expand=None, on_c
     for it in [n for n in news if n["cat"] in selected_cats]:
         render_card(it, expanded_id=expanded_id, on_expand=on_expand, on_collapse=on_collapse)
 
+
 # 하단 ‘맨 위로’
 def bottom_scroll_button(key: str):
     st.markdown("")
@@ -158,7 +159,7 @@ def chat_view(chat_history, faqs, show_suggests, on_quick, on_back, disabled=Fal
     # 흐림 효과 CSS
     st.markdown("<style>.dimmed{opacity:.5;filter:grayscale(20%);} </style>", unsafe_allow_html=True)
 
-    st.button("← 대시보드로 돌아가기", on_click=on_back)
+    st.button("← 대시보드로 돌아가기", key="back_to_dash", on_click=on_back)
     st.markdown("### 챗봇")
 
     for m in chat_history:
@@ -185,22 +186,6 @@ def chat_view(chat_history, faqs, show_suggests, on_quick, on_back, disabled=Fal
                         use_container_width=True,
                         disabled=disabled,
                     )
-
-            if disabled:
-                st.markdown("</div>", unsafe_allow_html=True)
-
-        bottom_scroll_button(key="scroll_top_chat")
-
-    return thinking_ph, False
-            )
-
-            if disabled:
-                st.markdown("</div>", unsafe_allow_html=True)
-
-        bottom_scroll_button(key="scroll_top_chat")
-
-    return thinking_ph, False
-            )
 
             if disabled:
                 st.markdown("</div>", unsafe_allow_html=True)

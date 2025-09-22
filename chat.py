@@ -37,4 +37,3 @@ ANSWERS_GENERAL = {
 def answer_for(profile_id: str, qid: str) -> str:
     # 추후 profile_id에 따라 다른 답변 반환하도록 확장 가능
     return ANSWERS_GENERAL.get(qid, "해당 질문에 대한 답변을 준비 중입니다.")
-AL.get(qid, "해당 질문에 대한 답변을 준비 중입니다.")

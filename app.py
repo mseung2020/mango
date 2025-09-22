@@ -71,6 +71,7 @@ else:
         bottom_scroll_button(key="scroll_top_dash")
 
     else:
+        # chat_view 호출부
         thinking_ph, _ = chat_view(
             chat_history=st.session_state.chat_history,
             faqs=FAQS,
@@ -90,5 +91,4 @@ else:
             st.session_state.chat_processing = False
             st.session_state.chat_busy = False   # ▶ 버튼 해제
             st.rerun()
-            st.session_state.chat_busy = False   # ▶ 버튼 해제
-            st.rerun()
+

@@ -56,5 +56,3 @@ def expand_item(item_id: str):
 def collapse_expanded():
     if "expanded_id" in st.session_state:
         del st.session_state["expanded_id"]
-sion_state:
-        del st.session_state["expanded_id"]

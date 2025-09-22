@@ -17,10 +17,10 @@ def seed_news(profile_id: str):
     base = datetime.utcnow()
     data = [
         {"when": "3일 전",   "title": f"{prefix} 급속충전 중 온도 상승 이슈", "cat": "사고",
-         "desc": "특정 구간에서 충전 중 온도 상승 보고.", "label": "추정", "updated": _now_str(),
+         "desc": "특정 구간에서 충전 중 온도 상승 보고.", "label": "보류", "updated": _now_str(),
          "source": "https://news.example/ev-heat"},
         {"when": "10일 전",  "title": f"{prefix} BMS 업데이트 권고", "cat": "기술",
-         "desc": "성능 개선 및 안전 패치 포함.", "label": "보류",
+         "desc": "성능 개선 및 안전 패치 포함.", "label": "확정",
          "updated": (base - timedelta(days=1)).strftime("%Y-%m-%d %H:%M"),
          "source": "https://news.example/bms-update"},
         {"when": "1개월 전", "title": f"{prefix} 배터리 냉각 개선 사례", "cat": "기술",
@@ -63,8 +63,4 @@ _EXTRA = {
 }
 
 def extra_alerts_for_profile(profile_id: str):
-    return list(_EXTRA.get(profile_id, []))
-e(profile_id: str):
-    return list(_EXTRA.get(profile_id, []))
-e(profile_id: str):
     return list(_EXTRA.get(profile_id, []))
