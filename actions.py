@@ -38,6 +38,7 @@ def add_latest_alert():
             "title": tpl["title"],
             "cat": tpl["cat"],
             "desc": tpl["desc"],
+            "detail": tpl.get("detail"),   # ✅ detail 전달
             "label": tpl.get("label","확정"),
             "updated": datetime.utcnow().strftime("%Y-%m-%d %H:%M"),
             "source": tpl.get("source","https://news.example/new"),
@@ -48,6 +49,7 @@ def add_latest_alert():
         st.session_state.alert_added = True
     else:
         st.session_state.no_more_alerts = True
+
 
 # ▼ 인라인 확장 제어
 def expand_item(item_id: str):

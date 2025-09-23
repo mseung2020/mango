@@ -4,19 +4,37 @@ import streamlit as st
 def profile_picker(profiles, on_pick):
     st.title("프로필을 선택하세요")
     st.caption("개인화된 대시보드 데모를 위해 임의의 프로필을 고릅니다.")
+
+    # 카드 스타일 주입
+    st.markdown("""
+    <style>
+    .profile-card {
+        min-height: 250px; /* 세로 길이 확보 */
+        padding: 16px;
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
     cols = st.columns(3)
     for col, p in zip(cols, profiles):
         with col:
-            st.markdown(f"### {p['icon']} {p['name']}")
-            st.caption(p["desc"])
-            st.button("선택", key=f"pick_{p['id']}", use_container_width=True,
-                      on_click=on_pick, args=(p["id"],),)
+            st.markdown(f"""
+            <div class="profile-card">
+                <h3>{p['icon']} {p['name']}</h3>
+                <p>{p['desc']}</p>
+            </div>
+            """, unsafe_allow_html=True)
+            st.button("선택", key=f"pick_{p['id']}", use_container_width=True, on_click=on_pick, args=(p["id"],))
+
 
 def sidebar_info(profiles, profile_id, on_reset, cats):
     cur = next(p for p in profiles if p["id"] == profile_id)
     st.sidebar.subheader("현재 프로필")
     st.sidebar.write(f"{cur['icon']} **{cur['name']}**")
-    st.sidebar.caption(cur["desc"])
+    # st.sidebar.caption(cur["desc"])
     st.sidebar.button("프로필 변경", on_click=on_reset, use_container_width=True)
 
     st.sidebar.markdown("---")
@@ -67,6 +85,7 @@ def _inject_badge_css():
     <style>
     .pill{display:inline-block;padding:2px 8px;border-radius:999px;
           font-size:12px;line-height:18px;margin-right:6px;}
+    .pill-new {background:#dc2626;color:#fff;}
     .pill-ok{background:#1f9d55;color:#fff;}
     .pill-warn{background:#d97706;color:#fff;}
     .pill-muted{background:#4b5563;color:#e5e7eb;}
@@ -76,6 +95,7 @@ def _inject_badge_css():
 def _label_class(label:str)->str:
     return "pill-ok" if label=="확정" else ("pill-warn" if label=="추정" else "pill-muted")
 
+# ui.py - render_card() 교체 부분
 def render_card(item, expanded_id=None, on_expand=None, on_collapse=None):
     _inject_badge_css()
     is_expanded = (expanded_id == item["id"])
@@ -92,28 +112,31 @@ def render_card(item, expanded_id=None, on_expand=None, on_collapse=None):
                 st.button("자세히", key=f"more_{item['id']}", use_container_width=True,
                           on_click=on_expand, args=(item["id"],))
 
-        # 본문/배지
+        # ✅ 공통 배지 문자열 미리 계산
+        label = item.get("label", "보류")
+        updated = item.get("updated", "-")
+        new_badge = "<span class='pill pill-new'>NEW</span>" if item.get("is_new") else ""
+
         if is_expanded:
-            st.write(item["desc"])
-            st.markdown(
-                f"<span class='pill {_label_class(item.get('label','보류'))}'>{item.get('label','보류')}</span>"
-                f"<span class='pill pill-muted'>갱신 {item.get('updated','-')}</span>",
-                unsafe_allow_html=True
-            )
-            # 출처 링크(선택)
-            if item.get("source"):
-                st.markdown(f"[출처 보기]({item['source']})")
-        else:
-            st.caption(item["desc"])
-            label = item.get("label","보류")
-            updated = item.get("updated","-")
-            new_badge = "<span class='pill pill-muted'>NEW</span>" if item.get("is_new") else ""
+            detail = item.get("detail") or item["desc"]
+            st.markdown(detail, unsafe_allow_html=True)  # ✅ 자세히 내용 표시
             st.markdown(
                 f"<span class='pill {_label_class(label)}'>{label}</span>"
                 f"<span class='pill pill-muted'>갱신 {updated}</span>"
                 f"{new_badge}",
                 unsafe_allow_html=True
             )
+            if item.get("source"):
+                st.markdown(f"[출처 보기]({item['source']})")
+        else:
+            st.caption(item["desc"])
+            st.markdown(
+                f"<span class='pill {_label_class(label)}'>{label}</span>"
+                f"<span class='pill pill-muted'>갱신 {updated}</span>"
+                f"{new_badge}",
+                unsafe_allow_html=True
+            )
+
 
 def render_news_list(news, selected_cats, expanded_id=None, on_expand=None, on_collapse=None):
     for it in [n for n in news if n["cat"] in selected_cats]:
